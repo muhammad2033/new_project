@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Maaz Gems Worldwide{% endblock %}
+
+{% block content %}
+<!-- Admin Header -->
+<header class="bg-gradient-to-r from-red-900 via-purple-900 to-red-900 text-white shadow-lg border-b-4 border-yellow-400">
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-3">
+                <span class="text-yellow-400 text-2xl">💎</span>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                    Admin Panel - Maaz Gems Worldwide
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="{{ url_for('add_gemstone') }}" 
+                   class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-colors duration-200 shadow-lg">
+                    <span>➕</span>
+                    <span>Add Gemstone</span>
+                </a>
+                <a href="{{ url_for('admin_logout') }}" 
+                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg flex items-center space-x-2 transition-colors duration-200 shadow-lg">
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+        
+        <form method="GET" class="relative max-w-md">
+            <input type="text" name="search" value="{{ search }}" 
+                   placeholder="Search inventory..."
+                   class="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+            <span class="absolute left-3 top-3 text-gray-400">🔍</span>
+        </form>
+    </div>
+</header>
+
+<!-- Filter Tabs -->
+<div class="bg-white shadow-sm border-b">
+    <div class="container mx-auto px-4">
+        <div class="flex space-x-8">
+            <a href="?status=all&search={{ search }}" 
+               class="py-4 px-2 border-b-2 font-medium text-sm transition-colors duration-200 {% if status_filter == 'all' %}border-purple-500 text-purple-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %}">
+                All
+                <span class="ml-2 px-2 py-1 text-xs bg-gray-100 rounded-full">{{ counts.all }}</span>
+            </a>
+            <a href="?status=available&search={{ search }}" 
+               class="py-4 px-2 border-b-2 font-medium text-sm transition-colors duration-200 {% if status_filter == 'available' %}border-purple-500 text-purple-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %}">
+                Available
+                <span class="ml-2 px-2 py-1 text-xs bg-gray-100 rounded-full">{{ counts.available }}</span>
+            </a>
+            <a href="?status=sold&search={{ search }}" 
+               class="py-4 px-2 border-b-2 font-medium text-sm transition-colors duration-200 {% if status_filter == 'sold' %}border-purple-500 text-purple-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %}">
+                Sold
+                <span class="ml-2 px-2 py-1 text-xs bg-gray-100 rounded-full">{{ counts.sold }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container mx-auto px-4 py-4">
+            {% for category, message in messages %}
+                <div class="alert bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg transition-opacity duration-300">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-8">
+    {% if gemstones %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for gemstone in gemstones %}
+            <div class="gem-card bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="h-48 bg-gradient-to-br from-purple-200 via-blue-200 to-emerald-200 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-purple-800">
+                            {{ gemstone.name[0].upper() }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ gemstone.name }}</h3>
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {{ gemstone.type }}
+                                </span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium {% if gemstone.status == 'available' %}bg-emerald-100 text-emerald-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                    {{ gemstone.status }}
+                                </span>
+                                {% if gemstone.featured %}
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Featured
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-500">🎨</span>
+                            <span class="text-sm text-gray-600">{{ gemstone.color }}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-500">⚖️</span>
+                            <span class="text-sm text-gray-600">{{ gemstone.weight }} ct</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-500">💰</span>
+                            <span class="text-sm text-gray-600">${{ "%.2f"|format(gemstone.price) }}</span>
+                        </div>
+                        <div class="text-sm text-gray-600">{{ gemstone.size or 'N/A' }}</div>
+                    </div>
+
+                    {% if gemstone.description %}
+                    <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ gemstone.description }}</p>
+                    {% endif %}
+
+                    <div class="flex items-center justify-between">
+                        <a href="{{ url_for('toggle_status', id=gemstone.id) }}" 
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 {% if gemstone.status == 'available' %}bg-red-600 hover:bg-red-700 text-white{% else %}bg-emerald-600 hover:bg-emerald-700 text-white{% endif %}">
+                            Mark as {% if gemstone.status == 'available' %}Sold{% else %}Available{% endif %}
+                        </a>
+                        
+                        <div class="flex space-x-2">
+                            <a href="{{ url_for('edit_gemstone', id=gemstone.id) }}" 
+                               class="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors duration-200">
+                                ✏️
+                            </a>
+                            <a href="{{ url_for('delete_gemstone', id=gemstone.id) }}" 
+                               onclick="return confirm('Are you sure you want to delete this gemstone?')"
+                               class="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200">
+                                🗑️
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <div class="text-gray-500 text-lg">
+                {% if search or status_filter != 'all' %}
+                    No gemstones found matching your criteria
+                {% else %}
+                    No gemstones in your inventory yet
+                {% endif %}
+            </div>
+            <a href="{{ url_for('add_gemstone') }}" 
+               class="mt-4 inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                Add Your First Gemstone
+            </a>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}

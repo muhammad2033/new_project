@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login - Maaz Gems Worldwide{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <div class="mx-auto w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mb-4">
+                <span class="text-white text-2xl">🔒</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900">Maaz Gems Admin</h2>
+            <p class="text-gray-600 mt-2">Simple login to manage your inventory</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg transition-opacity duration-300">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('admin_login_post') }}" class="space-y-6">
+            <div>
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" name="password" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                       placeholder="Enter your password">
+            </div>
+
+            <div class="flex space-x-4">
+                <a href="{{ url_for('index') }}" 
+                   class="flex-1 px-4 py-3 text-gray-600 hover:text-gray-800 font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-center">
+                    Cancel
+                </a>
+                <button type="submit" 
+                        class="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                    Login
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

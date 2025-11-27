@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Public Header -->
+<header class="bg-gradient-to-r from-emerald-900 via-blue-900 to-purple-900 text-white shadow-2xl">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Main Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="h-12 w-12 text-emerald-400 sparkle">💎</div>
+                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full animate-ping"></div>
+                </div>
+                <div>
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        Maaz Gems Worldwide
+                    </h1>
+                    <p class="text-emerald-200 text-lg font-medium">Authentic Cut, Rough & Crystal Stones</p>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_login') }}" class="text-xs text-gray-400 hover:text-white opacity-50 hover:opacity-100 transition-all duration-300">
+                Admin
+            </a>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-white/20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex items-center space-x-3">
+                    <div class="p-3 bg-emerald-500/20 rounded-full">
+                        <span class="text-emerald-400">📱</span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-emerald-200">WhatsApp Numbers</p>
+                        <a href="https://wa.me/923156526523" class="text-white font-semibold hover:text-emerald-300">03156526523</a><br>
+                        <a href="https://wa.me/923137473752" class="text-white font-semibold hover:text-emerald-300">03137473752</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="p-3 bg-blue-500/20 rounded-full">
+                        <span class="text-blue-400">📧</span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-blue-200">Email Address</p>
+                        <a href="mailto:mrmaazoo09876@gmail.com" class="text-white font-semibold hover:text-blue-300">mrmaazoo09876@gmail.com</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="p-3 bg-purple-500/20 rounded-full">
+                        <span class="text-purple-400">📍</span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-purple-200">Location</p>
+                        <p class="text-white font-semibold">Muhammad Maaz</p>
+                        <p class="text-white font-semibold">Pakistan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Bar -->
+        <form method="GET" class="relative max-w-2xl mx-auto">
+            <input type="text" name="search" value="{{ search }}" 
+                   placeholder="Search our gemstone collection..."
+                   class="w-full pl-12 pr-6 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-gray-300 focus:outline-none focus:ring-4 focus:ring-emerald-400/50 focus:border-emerald-400 text-lg transition-all duration-300">
+            <span class="absolute left-4 top-4 text-gray-400">🔍</span>
+        </form>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-8">
+    <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Premium Gemstone Collection</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Discover authentic cut, rough, and crystal stones carefully selected by Muhammad Maaz. 
+            Each gemstone is genuine and comes with quality assurance.
+        </p>
+    </div>
+
+    {% if gemstones %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for gemstone in gemstones %}
+            <div class="gem-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                {% if gemstone.featured %}
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-center py-2 font-semibold text-sm">
+                    ⭐ FEATURED GEMSTONE ⭐
+                </div>
+                {% endif %}
+                
+                <div class="relative">
+                    <div class="h-64 bg-gradient-to-br from-purple-200 via-blue-200 to-emerald-200 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/10"></div>
+                        <div class="relative z-10 text-center">
+                            <div class="w-20 h-20 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <span class="text-2xl sparkle">✨</span>
+                            </div>
+                            <span class="text-2xl font-bold text-purple-800 drop-shadow-lg">
+                                {{ gemstone.name[0].upper() }}
+                            </span>
+                        </div>
+                        <!-- Animated sparkles -->
+                        <div class="absolute top-4 left-4 w-2 h-2 bg-white rounded-full animate-ping"></div>
+                        <div class="absolute bottom-6 right-6 w-1 h-1 bg-white rounded-full animate-ping delay-300"></div>
+                        <div class="absolute top-1/2 left-6 w-1.5 h-1.5 bg-white rounded-full animate-ping delay-700"></div>
+                    </div>
+                    
+                    {% if gemstone.status == 'sold' %}
+                    <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        SOLD
+                    </div>
+                    {% else %}
+                    <div class="absolute top-4 right-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg animate-pulse">
+                        AVAILABLE
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="p-6">
+                    <div class="mb-4">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ gemstone.name }}</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gradient-to-r from-emerald-100 to-blue-100 text-emerald-800 rounded-full text-sm font-medium">
+                                {{ gemstone.type }}
+                            </span>
+                            {% if gemstone.featured %}
+                            <span class="px-3 py-1 bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                                Featured
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-emerald-600">🎨</span>
+                            <span class="text-gray-700 font-medium">{{ gemstone.color }}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-blue-600">⚖️</span>
+                            <span class="text-gray-700 font-medium">{{ gemstone.weight }} ct</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-purple-600">💰</span>
+                            <span class="text-gray-700 font-bold text-lg">${{ "%.2f"|format(gemstone.price) }}</span>
+                        </div>
+                        <div class="text-gray-600 font-medium">{{ gemstone.size or 'N/A' }}</div>
+                    </div>
+
+                    {% if gemstone.description %}
+                    <p class="text-gray-600 mb-6 leading-relaxed">{{ gemstone.description }}</p>
+                    {% endif %}
+
+                    {% if gemstone.status == 'available' %}
+                    <div class="flex space-x-3">
+                        <a href="https://wa.me/923156526523?text=Hi, I am interested in {{ gemstone.name }}" 
+                           class="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <span>📱</span>
+                            <span>WhatsApp</span>
+                        </a>
+                        <a href="mailto:mrmaazoo09876@gmail.com?subject=Inquiry about {{ gemstone.name }}" 
+                           class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <span>📧</span>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-3 text-gray-500 font-medium">
+                        This gemstone has been sold
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <div class="text-gray-500 text-lg">
+                No gemstones found matching your search criteria
+            </div>
+        </div>
+    {% endif %}
+</main>
+
+<!-- Contact Banner -->
+<div class="bg-gradient-to-r from-emerald-800 via-blue-800 to-purple-800 text-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Get in Touch with Muhammad Maaz</h2>
+            <p class="text-xl text-emerald-200 mb-2">Your Trusted Partner at Maaz Gems Worldwide</p>
+            <div class="flex items-center justify-center space-x-2 text-yellow-400">
+                <span>⭐⭐⭐⭐⭐</span>
+                <span class="ml-2 text-white">Authentic & Quality Guaranteed</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-xl font-semibold mb-3">WhatsApp Direct</h3>
+                    <div class="space-y-2">
+                        <a href="https://wa.me/923156526523" class="block text-green-200 hover:text-white transition-colors">
+                            📱 03156526523
+                        </a>
+                        <a href="https://wa.me/923137473752" class="block text-green-200 hover:text-white transition-colors">
+                            📱 03137473752
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
+                    <div class="text-4xl mb-4">📞</div>
+                    <h3 class="text-xl font-semibold mb-3">Call Direct</h3>
+                    <div class="space-y-1">
+                        <p class="text-blue-200">03156526523</p>
+                        <p class="text-blue-200">03137473752</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
+                    <div class="text-4xl mb-4">📧</div>
+                    <h3 class="text-xl font-semibold mb-3">Email Us</h3>
+                    <p class="text-purple-200 break-all">mrmaazoo09876@gmail.com</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
+                    <div class="text-4xl mb-4">📍</div>
+                    <h3 class="text-xl font-semibold mb-3">Location</h3>
+                    <p class="text-yellow-200">Pakistan</p>
+                    <p class="text-sm text-gray-300 mt-2">Worldwide Shipping Available</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-4">Why Choose Maaz Gems Worldwide?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm mb-6">
+                    <div>
+                        <div class="text-emerald-400 font-semibold mb-2">✨ Cut Stones</div>
+                        <p class="text-gray-300">Precision cut gemstones</p>
+                    </div>
+                    <div>
+                        <div class="text-blue-400 font-semibold mb-2">🪨 Rough Stones</div>
+                        <p class="text-gray-300">Natural uncut specimens</p>
+                    </div>
+                    <div>
+                        <div class="text-purple-400 font-semibold mb-2">💎 Crystal Stones</div>
+                        <p class="text-gray-300">Beautiful crystal formations</p>
+                    </div>
+                    <div>
+                        <div class="text-yellow-400 font-semibold mb-2">🌍 Worldwide</div>
+                        <p class="text-gray-300">Global shipping available</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                    <div>
+                        <div class="text-emerald-400 font-semibold mb-2">✓ Authentic Stones</div>
+                        <p class="text-gray-300">All gemstones are genuine and certified</p>
+                    </div>
+                    <div>
+                        <div class="text-blue-400 font-semibold mb-2">✓ Expert Knowledge</div>
+                        <p class="text-gray-300">Years of experience in gemstone trading</p>
+                    </div>
+                    <div>
+                        <div class="text-purple-400 font-semibold mb-2">✓ Competitive Prices</div>
+                        <p class="text-gray-300">Direct from source, best value guaranteed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+        <p class="text-gray-400">
+            © 2024 Maaz Gems Worldwide - Muhammad Maaz, Pakistan. All rights reserved.
+        </p>
+        <p class="text-sm text-gray-500 mt-2">
+            Authentic gemstones with worldwide shipping available
+        </p>
+    </div>
+</footer>
+{% endblock %}
